@@ -20,4 +20,3 @@ date = time.strftime("%Y-%m-%d")
 FileUtils.mkdir_p directory unless Dir.exists?(directory)
 # Writing parsed data to file
 File.write("#{directory}/#{date}.txt", data)
-
