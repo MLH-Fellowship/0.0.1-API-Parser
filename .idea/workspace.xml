@@ -31,15 +31,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de793c09-b9b0-4a65-bcdf-073cb47f9ff2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/0.0.1-API-Parser.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/formatHomeBrewJson.rb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/formatRepologyJson.rb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/getHomeBrewJson.rb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/getRepologyJson.rb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/repology-JSON/unformatted/log.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/getRepologyJson.rb" beforeDir="false" afterPath="$PROJECT_DIR$/getRepologyJson.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,11 +59,18 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="SpringUtil" SPRING_PRE_LOADER_OPTION="true" RAKE_SPRING_PRE_LOADER_OPTION="true" RAILS_SPRING_PRE_LOADER_OPTION="true" />
   <component name="SvnConfiguration">
@@ -83,7 +84,8 @@
       <option name="presentableId" value="Default" />
       <updated>1591137237924</updated>
       <workItem from="1591137240834" duration="24000" />
-      <workItem from="1591137268796" duration="195000" />
+      <workItem from="1591137268796" duration="1103000" />
+      <workItem from="1591138624582" duration="1200000" />
     </task>
     <servers />
   </component>
@@ -100,8 +102,16 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591138238216">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1591138238216" />
     <state x="739" y="262" key="FileChooserDialogImpl" timestamp="1591137259899">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
