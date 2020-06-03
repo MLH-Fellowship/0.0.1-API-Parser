@@ -33,5 +33,3 @@ end
 # Writing parsed data to file
 puts "- Writing data to file"
 File.write("#{directory}/#{date}.txt", parsed_homebrew_packages.join("\n"))
-
-

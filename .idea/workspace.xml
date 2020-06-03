@@ -31,8 +31,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de793c09-b9b0-4a65-bcdf-073cb47f9ff2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/repology-JSON/unformatted/log.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/repology-JSON/unformatted/latest.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/formatRepologyJson.rb" beforeDir="false" afterPath="$PROJECT_DIR$/formatRepologyJson.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/getHomeBrewJson.rb" beforeDir="false" afterPath="$PROJECT_DIR$/getHomeBrewJson.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/getRepologyJson.rb" beforeDir="false" afterPath="$PROJECT_DIR$/getRepologyJson.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,6 +88,9 @@
       <workItem from="1591137240834" duration="24000" />
       <workItem from="1591137268796" duration="1103000" />
       <workItem from="1591138624582" duration="1200000" />
+      <workItem from="1591146887939" duration="83000" />
+      <workItem from="1591147049311" duration="2051000" />
+      <workItem from="1591202999387" duration="379000" />
     </task>
     <servers />
   </component>
@@ -116,5 +121,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="739" y="262" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1591137259899" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1591145443064">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1591145443064" />
   </component>
 </project>
