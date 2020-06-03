@@ -11,7 +11,7 @@
 /tmp/
 /data
 .DS_Store
-/.idea
+.idea/
 # Used by dotenv library to load environment variables.
 # .env
 
