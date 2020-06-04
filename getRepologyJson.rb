@@ -16,7 +16,16 @@ puts "- Generating datestamp"
 time = Time.new
 date = time.strftime("%Y-%m-%d")
 
+
+parsedResults= []
+data.each do |key, value|
+	parsedResults.push(key)
+	value.each do |item|
+		parsedResults.push(repo: item["repo"], version: item["version"])
+	end
+end
+
 # Create directory if does not exist
 FileUtils.mkdir_p directory unless Dir.exists?(directory)
 # Writing parsed data to file
-File.write("#{directory}/#{date}.txt", data)
+File.write("#{directory}/#{date}.txt", parsedResults)
