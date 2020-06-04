@@ -21,12 +21,11 @@ puts "- Generating datetime stamp"
 date_time = Time.new.strftime("%Y-%m-%dT%H-%M-%S")
 
 packages.each do |package|
-  parsed_homebrew_package = {
-    name: package["name"],
-    fullname: package["fullname"],
-    oldname: package["oldname"],
-    versions: package["versions"]
-  }
+  parsed_homebrew_package = {}
+  parsed_homebrew_package['name'] = package["name"]
+  parsed_homebrew_package['fullname'] = package["fullname"],
+  parsed_homebrew_package['oldname'] = package["oldname"],
+  parsed_homebrew_package['nversionsame'] = package["versions"]
   parsed_homebrew_packages.push(parsed_homebrew_package)
 end
 
