@@ -12,11 +12,11 @@ response = Net::HTTP.get(uri)
 puts "- Parsing response"
 data = JSON.parse(response)
 
-puts "- Generating datestamp"
-time = Time.new
-date = time.strftime("%Y-%m-%d")
+puts "- Generating datetime stamp"
+#Include time to the filename for uniqueness when fetching multiple times a day
+date_time = Time.new.strftime("%Y-%m-%dT%H-%M-%S")
 
 # Create directory if does not exist
 FileUtils.mkdir_p directory unless Dir.exists?(directory)
 # Writing parsed data to file
-File.write("#{directory}/#{date}.txt", data)
+File.write("#{directory}/#{date_time}.txt", data)
