@@ -2,19 +2,32 @@ require 'fileutils'
 require 'net/http'
 require 'json'
 
-url = 'https://repology.org/api/v1/projects/?inrepo=homebrew&outdated=1'
+def parse_repology(lastpackage)
+  url = 'https://repology.org/api/v1/projects/' + lastpackage + '?inrepo=homebrew&outdated=1'
+  
+  puts "- Calling API #{url}"
+  uri = URI(url)
+  response = Net::HTTP.get(uri)
+
+  puts "- Parsing response"
+  return JSON.parse(response)
+end
+
 directory = "data/repology"
 outdated_repology_packages = []
 
-puts "- Calling API #{url}"
-uri = URI(url)
-response = Net::HTTP.get(uri)
+packages = parse_repology('')
+last_index = packages.size - 1
+response_size = packages.size
 
-puts "- Parsing response"
-packages = JSON.parse(response)
-puts packages.size
-puts packages.at(199)
-abort
+while response_size > 1  do
+  puts "- Paginating"
+  last_package = packages.keys[last_index]
+  response = parse_repology("#{last_package}/")
+  response_size = response.size
+  packages.merge!(response)
+  last_index = packages.size - 1
+end
 
 packages.each do |package|
   parsed_outdated_package = {}
@@ -43,3 +56,5 @@ date = time.strftime("%Y-%m-%d")
 # Writing parsed data to file
 puts "- Writing data to file"
 File.write("#{directory}/#{date}.txt", outdated_repology_packages.join("\n"))
+
+
