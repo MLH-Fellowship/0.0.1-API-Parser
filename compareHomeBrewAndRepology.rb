@@ -37,7 +37,7 @@ FileUtils.mkdir_p directory unless Dir.exists?(directory)
 
 puts "- Generating datetime stamp"
 #Include time to the filename for uniqueness when fetching multiple times a day
-date_time = Time.new.strftime("%Y-%m-%dT%H:%M:%S")
+date_time = Time.new.strftime("%Y-%m-%dT%H_%M_%S")
 
 # Writing parsed data to file
 puts "- Writing data to file"
