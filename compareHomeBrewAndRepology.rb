@@ -23,8 +23,10 @@ File.foreach(repology_file) { |line|
   IO.foreach(homebrew_file) do |line|
     if line[rx]
       line_hash = eval(line) 
-      package = line_hash["name"] + "(" + newestversion + ")"
-      outdated_package.push(package)
+      if line_hash["name"] == packagename
+        package = line_hash["name"] + "(" + newestversion + ")"
+        outdated_package.push(package)
+      end
     end
   end
  
