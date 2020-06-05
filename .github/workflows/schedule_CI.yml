@@ -1,10 +1,9 @@
 name: Schedule CI
 on:
-  push:
-  pull_request:
-    branches: [master]
-  schedule: # Setup cron for timing
-  - cron: '*/5 * * * *'
+  schedule:
+    - cron: "*/5 * * * *"
+      
+  
 jobs:
   build:
     runs-on: ubuntu-18.04
