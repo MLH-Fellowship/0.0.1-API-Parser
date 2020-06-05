@@ -1,9 +1,7 @@
-name: CI
+name: Schedule CI
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+  schedule: # Setup cron for timing
+    - cron: '*/10 * * * *'
 jobs:
   build:
     runs-on: ubuntu-18.04
@@ -15,5 +13,5 @@ jobs:
       - run: ruby getHomeBrewJson.rb
       - run: ruby getRepologyJson.rb
       - run: ruby compareHomeBrewAndRepology.rb
-        
+
       # Setup PRs to be made against HomeBrew
