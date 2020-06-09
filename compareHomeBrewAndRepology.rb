@@ -7,6 +7,10 @@ def get_latest_file(directory)
   Dir.glob("#{directory}/*").max_by(1) {|f| File.mtime(f)}[0]
 end
 
+def new_download_url(outdated_url, old_version, latest_version)
+  return outdated_url.gsub(old_version, latest_version)
+end
+
 repology_file = get_latest_file("data/repology")
 homebrew_file = get_latest_file("data/homebrew")
 directory = "data/outdatedpacakges"
@@ -24,8 +28,12 @@ File.foreach(repology_file) do |line|
     if line[rx]
       line_hash = eval(line)
       package = {}
+      prev_version = line_hash['versions']['stable']
+      prev_download_url = line_hash['download_url']
+
       package["name"] = line_hash["name"]
       package["latest_version"] = newestversion
+      package["download_url"]   = new_download_url(prev_download_url, prev_version, newestversion)
       outdated_package_list.push(package)
     end
   end
