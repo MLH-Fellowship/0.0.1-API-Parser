@@ -1,5 +1,6 @@
 require 'json'
 require 'fileutils'
+require 'open-uri'
 
 
 def get_latest_file(directory)
@@ -8,7 +9,7 @@ def get_latest_file(directory)
 end
 
 def new_download_url(outdated_url, old_version, latest_version)
-  return outdated_url.gsub(old_version, latest_version)
+  outdated_url.gsub(old_version, latest_version)
 end
 
 repology_file = get_latest_file("data/repology")
@@ -30,10 +31,12 @@ File.foreach(repology_file) do |line|
       package = {}
       prev_version = line_hash['versions']['stable']
       prev_download_url = line_hash['download_url']
+      new_download_url = new_download_url(prev_download_url, prev_version, newestversion)
 
       package["name"] = line_hash["name"]
       package["latest_version"] = newestversion
-      package["download_url"]   = new_download_url(prev_download_url, prev_version, newestversion)
+      package["old_url"] = prev_download_url
+      package["download_url"] = new_download_url
       outdated_package_list.push(package)
     end
   end
