@@ -12,6 +12,12 @@ def new_download_url(outdated_url, old_version, latest_version)
   outdated_url.gsub(old_version, latest_version)
 end
 
+def generate_checksum(new_url)
+  tempfile = URI.parse(new_url).open
+  tempfile.close
+  Digest::SHA256.file(tempfile.path).hexdigest
+end
+
 repology_file = get_latest_file("data/repology")
 homebrew_file = get_latest_file("data/homebrew")
 directory = "data/outdatedpacakges"
