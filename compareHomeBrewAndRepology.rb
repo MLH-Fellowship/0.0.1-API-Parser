@@ -13,9 +13,13 @@ def new_download_url(outdated_url, old_version, latest_version)
 end
 
 def generate_checksum(new_url)
-  tempfile = URI.parse(new_url).open
-  tempfile.close
-  Digest::SHA256.file(tempfile.path).hexdigest
+  begin
+    tempfile = URI.parse(new_url).open
+    tempfile.close
+    return Digest::SHA256.file(tempfile.path).hexdigest
+  rescue
+    return nil
+  end
 end
 
 repology_file = get_latest_file("data/repology")
@@ -39,14 +43,21 @@ File.foreach(repology_file) do |line|
       prev_download_url = line_hash['download_url']
       new_download_url = new_download_url(prev_download_url, prev_version, newestversion)
 
-      package["name"] = line_hash["name"]
-      package["latest_version"] = newestversion
-      package["old_url"] = prev_download_url
-      package["download_url"] = new_download_url
-      outdated_package_list.push(package)
+      checksum = generate_checksum(new_download_url)
+
+      if checksum
+        package["name"] = line_hash["name"]
+        package["latest_version"] = newestversion
+        package["old_url"] = prev_download_url
+        package["download_url"] = new_download_url
+        package["checksum"] = checksum
+        outdated_package_list.push(package)
+      end
     end
   end
 end
+
+p generate_checksum("https://github.com/witten/borgmatic/archive/1.5.6.tar.gz")
 
 # Create directory if does not exist
 FileUtils.mkdir_p directory unless Dir.exists?(directory)
