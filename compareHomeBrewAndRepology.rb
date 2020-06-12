@@ -72,5 +72,5 @@ date_time = Time.new.strftime("%Y-%m-%dT%H_%M_%S")
 
 # Writing parsed data to file
 puts "- Writing data to file"
-File.write("#{updates_dir}/#{date_time}.txt", outdated_packages_to_update)
-File.write("#{no_updates_dir}/#{date_time}.txt", outdated_packages_no_update)
+File.write("#{updates_dir}/#{date_time}.txt", outdated_pckgs_to_update)
+File.write("#{no_updates_dir}/#{date_time}.txt", outdated_pckgs_no_update)
