@@ -1,12 +1,7 @@
 require 'json'
 require 'fileutils'
 require 'open-uri'
-
-
-def get_latest_file(directory)
-  puts "- retrieving latest file in directory: #{directory}"
-  Dir.glob("#{directory}/*").max_by(1) {|f| File.mtime(f)}[0]
-end
+require_relative 'helpers/parsed_file'
 
 def new_download_url(outdated_url, old_version, latest_version)
   outdated_url.gsub(old_version, latest_version)
@@ -22,12 +17,15 @@ def generate_checksum(new_url)
   end
 end
 
-repology_file = get_latest_file("data/repology")
-homebrew_file = get_latest_file("data/homebrew")
+parsed_file = ParsedFile.new
+repology_file = parsed_file.get_latest_file("data/repology")
+homebrew_file = parsed_file.get_latest_file("data/homebrew")
+
 directory = "data/outdatedpacakges"
 outdated_package_list = []
 
 puts "- Comparing Repology file: #{repology_file} to #{homebrew_file}"
+abort
 File.foreach(repology_file) do |line|
   line_hash = eval(line)
   packagename = line_hash['packagename']
@@ -59,13 +57,6 @@ end
 
 p generate_checksum("https://github.com/witten/borgmatic/archive/1.5.6.tar.gz")
 
-# Create directory if does not exist
-FileUtils.mkdir_p directory unless Dir.exists?(directory)
 
-puts "- Generating datetime stamp"
-#Include time to the filename for uniqueness when fetching multiple times a day
-date_time = Time.new.strftime("%Y-%m-%dT%H_%M_%S")
+parsed_file.save_to(directory, outdated_package_list)
 
-# Writing parsed data to file
-puts "- Writing data to file"
-File.write("#{directory}/#{date_time}.txt", outdated_package_list)

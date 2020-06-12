@@ -1,24 +1,12 @@
-require 'fileutils'
-require 'net/http'
-require 'json'
+require_relative 'helpers/parsed_file'
+require_relative 'helpers/api_parser'
 
 url = 'https://formulae.brew.sh/api/formula.json'
 directory = "data/homebrew"
 parsed_homebrew_packages = []
 
-puts "- Calling API #{url}"
-uri = URI(url)
-response = Net::HTTP.get(uri)
-
-puts "- Parsing response"
-packages = JSON.parse(response)
-
-# Create directory if does not exist
-FileUtils.mkdir_p directory unless Dir.exists?(directory)
-
-puts "- Generating datetime stamp"
-#Include time to the filename for uniqueness when fetching multiple times a day
-date_time = Time.new.strftime("%Y-%m-%dT%H_%M_%S")
+api_parser = ApiParser.new
+packages = api_parser.call_api(url)
 
 packages.each do |package|
   parsed_homebrew_package = {}
@@ -30,6 +18,5 @@ packages.each do |package|
   parsed_homebrew_packages.push(parsed_homebrew_package)
 end
 
-# Writing parsed data to file
-puts "- Writing data to file"
-File.write("#{directory}/#{date_time}.txt", parsed_homebrew_packages.join("\n"))
+parsed_file = ParsedFile.new
+parsed_file.save_to(directory, parsed_homebrew_packages.join("\n"))
