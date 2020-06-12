@@ -46,7 +46,7 @@ File.foreach(repology_file) do |line|
 
       checksum = generate_checksum(new_download_url)
 
-      if checksum
+      if line_hash["name"] == packagename and checksum
         package["name"] = line_hash["name"]
         package["latest_version"] = newestversion
         package["old_url"] = prev_download_url
