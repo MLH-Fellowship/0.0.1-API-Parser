@@ -24,8 +24,10 @@ end
 
 repology_file = get_latest_file("data/repology")
 homebrew_file = get_latest_file("data/homebrew")
-directory = "data/outdatedpackages"
-outdated_package_list = []
+updates_dir = "data/outdated_pckgs_to_update"
+no_updates_dir = "data/outdated_pckgs_no_update"
+outdated_pckgs_to_update = []
+outdated_pckgs_no_update = []
 
 puts "- Comparing Repology file: #{repology_file} to #{homebrew_file}"
 File.foreach(repology_file) do |line|
@@ -43,22 +45,26 @@ File.foreach(repology_file) do |line|
       prev_download_url = line_hash['download_url']
       new_download_url = new_download_url(prev_download_url, prev_version, newestversion)
 
+      package["name"] = line_hash["name"]
+      package["latest_version"] = newestversion
+      package["old_url"] = prev_download_url
+
       checksum = generate_checksum(new_download_url)
 
       if checksum
-        package["name"] = line_hash["name"]
-        package["latest_version"] = newestversion
-        package["old_url"] = prev_download_url
         package["download_url"] = new_download_url
         package["checksum"] = checksum
-        outdated_package_list.push(package)
+        outdated_pckgs_to_update.push(package)
+      else
+        outdated_pckgs_no_update.push(package)
       end
     end
   end
 end
 
 # Create directory if does not exist
-FileUtils.mkdir_p directory unless Dir.exists?(directory)
+FileUtils.mkdir_p updates_dir unless Dir.exists?(updates_dir)
+FileUtils.mkdir_p no_updates_dir unless Dir.exists?(no_updates_dir)
 
 puts "- Generating datetime stamp"
 #Include time to the filename for uniqueness when fetching multiple times a day
@@ -66,4 +72,5 @@ date_time = Time.new.strftime("%Y-%m-%dT%H_%M_%S")
 
 # Writing parsed data to file
 puts "- Writing data to file"
-File.write("#{directory}/#{date_time}.txt", outdated_package_list)
+File.write("#{updates_dir}/#{date_time}.txt", outdated_packages_to_update)
+File.write("#{no_updates_dir}/#{date_time}.txt", outdated_packages_no_update)
