@@ -4,15 +4,18 @@ require 'open-uri'
 require_relative 'helpers/parsed_file'
 
 def new_download_url(outdated_url, old_version, latest_version)
+  puts "- Generating download url"
   outdated_url.gsub(old_version, latest_version)
 end
 
 def generate_checksum(new_url)
   begin
+    puts "- Generating checksum for url: #{new_url}"
     tempfile = URI.parse(new_url).open
     tempfile.close
     return Digest::SHA256.file(tempfile.path).hexdigest
   rescue
+    puts "- Failed to generate Checksum"
     return nil
   end
 end
@@ -25,7 +28,7 @@ directory = "data/outdatedpacakges"
 outdated_package_list = []
 
 puts "- Comparing Repology file: #{repology_file} to #{homebrew_file}"
-abort
+
 File.foreach(repology_file) do |line|
   line_hash = eval(line)
   packagename = line_hash['packagename']
@@ -55,8 +58,7 @@ File.foreach(repology_file) do |line|
   end
 end
 
-p generate_checksum("https://github.com/witten/borgmatic/archive/1.5.6.tar.gz")
-
+generate_checksum("https://github.com/witten/borgmatic/archive/1.5.6.tar.gz")
 
 parsed_file.save_to(directory, outdated_package_list)
 
