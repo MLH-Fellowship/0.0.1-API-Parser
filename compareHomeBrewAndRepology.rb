@@ -57,8 +57,6 @@ File.foreach(repology_file) do |line|
   end
 end
 
-p generate_checksum("https://github.com/witten/borgmatic/archive/1.5.6.tar.gz")
-
 # Create directory if does not exist
 FileUtils.mkdir_p directory unless Dir.exists?(directory)
 
