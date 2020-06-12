@@ -24,7 +24,7 @@ end
 
 repology_file = get_latest_file("data/repology")
 homebrew_file = get_latest_file("data/homebrew")
-directory = "data/outdatedpacakges"
+directory = "data/outdatedpackages"
 outdated_package_list = []
 
 puts "- Comparing Repology file: #{repology_file} to #{homebrew_file}"
