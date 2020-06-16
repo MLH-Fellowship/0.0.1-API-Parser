@@ -1,7 +1,6 @@
 require_relative 'helpers/parsed_file'
 require_relative 'helpers/homebrew_formula'
 
-
 parsed_file = ParsedFile.new
 homebrew_formula = HomebrewFormula.new
 
@@ -28,8 +27,6 @@ File.foreach(repology_file) do |line|
       
       if line_hash["name"] == packagename 
         package = {}
-        puts line_hash
-        puts "\n"
 
         package["name"] = line_hash["name"]
         prev_version = line_hash['versions']['stable']
