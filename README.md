@@ -33,7 +33,7 @@ This project will automatically check which packages have had newer versions rel
   {"packagename"=>"2ping", "newestversion"=>"4.4.1", "srcname"=>"twoping",
   "visiblename"=>"twoping", "currentversion"=>"4.4"}
   ```
-- Finally, execute `ruby compareHomeBrewAndRepology.rb`. This file compares the data in the two `.txt` files produced by querying Homebrew and Repology. Subsequently, a new download URL for the latest version is generated. If the download URL proves to be valid, a checksum is also generated.
+- Next, execute `ruby compareHomeBrewAndRepology.rb`. This file compares the data in the two `.txt` files produced by querying Homebrew and Repology. Subsequently, a new download URL for the latest version is generated. If the download URL proves to be valid, a checksum is also generated.
   - The resulting data is stored in `.txt` files in the `data` directory.
     - The `outdated_pckgs_no_update` directory holds data regarding packages that are out-of-date, but for which this project could not automatically generate an up-to-date download url.
     - The `outdated_pckgs_to_update` directory holds data regarding packages that are out-of-date, and for which a valid download url and checksum have been generated
@@ -45,6 +45,7 @@ This project will automatically check which packages have had newer versions rel
     "checksum"=>"a5537243a0f9110bf23b058c152445c20021cc7989c99fc134f3f92f842e765d"}
     ```
 - For each package listed in `data/outdated_pckgs_to_update/<FILE_NAME>`, a PR will automatically be submitted to Homebrew to update the package's formula to the latest version.
+- Finally, execute `bumpFormulae.rb`. This file reads the lastest file from `data/outdated_pckgs_to_update` and then verifies each projet newwest version with livecheck command and then goes ahead to open a PR to homebrew core with the command `brew bump-formula-pr`
 
 ## Contributing
 
