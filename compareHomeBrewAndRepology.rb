@@ -1,64 +1,60 @@
-require 'json'
-require 'fileutils'
-require 'open-uri'
 require_relative 'helpers/parsed_file'
+require_relative 'helpers/homebrew_formula'
 
-def new_download_url(outdated_url, old_version, latest_version)
-  puts "- Generating download url"
-  outdated_url.gsub(old_version, latest_version)
-end
-
-def generate_checksum(new_url)
-  begin
-    puts "- Generating checksum for url: #{new_url}"
-    tempfile = URI.parse(new_url).open
-    tempfile.close
-    return Digest::SHA256.file(tempfile.path).hexdigest
-  rescue
-    puts "- Failed to generate Checksum"
-    return nil
-  end
-end
 
 parsed_file = ParsedFile.new
+homebrew_formula = HomebrewFormula.new
+
 repology_file = parsed_file.get_latest_file("data/repology")
 homebrew_file = parsed_file.get_latest_file("data/homebrew")
+updates_dir = "data/outdated_pckgs_to_update"
+no_updates_dir = "data/outdated_pckgs_no_update"
 
-directory = "data/outdatedpacakges"
-outdated_package_list = []
+outdated_pckgs_to_update = []
+outdated_pckgs_no_update = []
 
 puts "- Comparing Repology file: #{repology_file} to #{homebrew_file}"
 
 File.foreach(repology_file) do |line|
-  line_hash = eval(line)
-  packagename = line_hash['packagename']
-  newestversion = line_hash['newestversion']
+  repology_file_line_hash = eval(line)
+  packagename = repology_file_line_hash['srcname']
+  newestversion = repology_file_line_hash['newestversion']
 
   rx = Regexp.new(Regexp.escape(packagename), true)
 
   IO.foreach(homebrew_file) do |line|
     if line[rx]
       line_hash = eval(line)
-      package = {}
-      prev_version = line_hash['versions']['stable']
-      prev_download_url = line_hash['download_url']
-      new_download_url = new_download_url(prev_download_url, prev_version, newestversion)
+      
+      if line_hash["name"] == packagename 
+        package = {}
+        puts line_hash
+        puts "\n"
 
-      checksum = generate_checksum(new_download_url)
-
-      if line_hash["name"] == packagename and checksum
         package["name"] = line_hash["name"]
+        prev_version = line_hash['versions']['stable']
+        prev_download_url = line_hash['download_url']
+        
         package["latest_version"] = newestversion
         package["old_url"] = prev_download_url
-        package["download_url"] = new_download_url
-        package["checksum"] = checksum
-        outdated_package_list.push(package)
+
+        new_download_url = homebrew_formula.generate_new_download_url(prev_download_url, prev_version, newestversion)
+        checksum = homebrew_formula.generate_checksum(new_download_url)
+
+        if checksum
+          package["download_url"] = new_download_url
+          package["checksum"] = checksum
+          puts package 
+          abort
+          outdated_pckgs_to_update.push(package)
+        else
+          outdated_pckgs_no_update.push(package)
+        end
       end
     end
   end
 end
 
-generate_checksum("https://github.com/witten/borgmatic/archive/1.5.6.tar.gz")
-
-parsed_file.save_to(directory, outdated_package_list)
+parsed_file.save_to(updates_dir, outdated_pckgs_to_update.join("\n"))
+parsed_file.save_to(no_updates_dir, outdated_pckgs_no_update.join("\n"))
 
