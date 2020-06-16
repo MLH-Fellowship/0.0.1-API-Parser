@@ -44,8 +44,7 @@ File.foreach(repology_file) do |line|
         if checksum
           package["download_url"] = new_download_url
           package["checksum"] = checksum
-          puts package 
-          abort
+  
           outdated_pckgs_to_update.push(package)
         else
           outdated_pckgs_no_update.push(package)
