@@ -1,8 +1,8 @@
 require_relative 'helpers/parsed_file'
 require_relative 'helpers/api_parser'
 
-directory = "data/repology"
-outdated_repology_packages = []
+def filter_homebrew(json)
+  result = {}
 
 api_parser = ApiParser.new
 packages = api_parser.parse_repology_api('')
@@ -33,8 +33,6 @@ packages.each do |package|
       parsed_outdated_package["currentversion"] = project["version"]
     end
   end
-  outdated_repology_packages.push(parsed_outdated_package)
-end
 
 parsed_file = ParsedFile.new
 parsed_file.save_to(directory, outdated_repology_packages.join("\n"))
