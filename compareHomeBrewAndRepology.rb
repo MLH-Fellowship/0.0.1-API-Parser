@@ -12,26 +12,30 @@ no_updates_dir = "data/outdated_pckgs_no_update"
 outdated_pckgs_to_update = []
 outdated_pckgs_no_update = []
 
+def package_regex(name)
+  Regexp.new(Regexp.escape(name), true) if name
+end
+
 puts "- Comparing Repology file: #{repology_file} to #{homebrew_file}"
 
 File.foreach(repology_file) do |line|
   repology_file_line_hash = eval(line)
-  packagename = repology_file_line_hash['srcname']
+  package_name = repology_file_line_hash['srcname']
   newestversion = repology_file_line_hash['newestversion']
 
-  rx = Regexp.new(Regexp.escape(packagename), true)
+  rx = package_regex(package_name)
 
   IO.foreach(homebrew_file) do |line|
-    if line[rx]
+    if rx && line[rx]
       line_hash = eval(line)
-      
-      if line_hash["name"] == packagename 
+
+      if line_hash["name"] == package_name
         package = {}
 
         package["name"] = line_hash["name"]
         prev_version = line_hash['versions']['stable']
         prev_download_url = line_hash['download_url']
-        
+
         package["latest_version"] = newestversion
         package["old_url"] = prev_download_url
 
@@ -41,7 +45,7 @@ File.foreach(repology_file) do |line|
         if checksum
           package["download_url"] = new_download_url
           package["checksum"] = checksum
-  
+
           outdated_pckgs_to_update.push(package)
         else
           outdated_pckgs_no_update.push(package)
@@ -53,4 +57,3 @@ end
 
 parsed_file.save_to(updates_dir, outdated_pckgs_to_update.join("\n"))
 parsed_file.save_to(no_updates_dir, outdated_pckgs_no_update.join("\n"))
-

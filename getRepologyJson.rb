@@ -25,9 +25,9 @@ packages.each do |package|
 
   for project in package[1] do
     result = package[1].find {|item| item["status"] == "newest" or item["status"] == "devel" }
-    parsed_outdated_package["newestversion"] = result["version"]
 
-    if project["repo"] == "homebrew"
+    if project["repo"] == "homebrew" and result != nil
+      parsed_outdated_package["newestversion"] = result["version"]
       parsed_outdated_package["srcname"] = project["srcname"]
       parsed_outdated_package["visiblename"] = project["visiblename"]
       parsed_outdated_package["currentversion"] = project["version"]
