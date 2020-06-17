@@ -17,7 +17,13 @@ def filter_homebrew(json)
   result = {}
 
   json.each do |pckg, data|
-    homebrew_data = data.select { |repo| repo['repo'] == 'homebrew' }
+    homebrew_data = data.select { |repo| repo['repo'] == 'homebrew' }[0]
+    latest_v = nil
+    data.each do |datum|
+      latest_v = datum['version'] if datum['status'] == 'newest'
+    end
+
+    homebrew_data['latest_v'] = latest_v if latest_v
     result[pckg] = homebrew_data if !homebrew_data.empty?
   end
 

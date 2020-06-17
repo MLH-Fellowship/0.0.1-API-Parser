@@ -2,16 +2,8 @@ require 'fileutils'
 require 'net/http'
 require 'json'
 
-#url = 'https://formulae.brew.sh/api/formula.json'
 # directory = "data/homebrew"
 #parsed_homebrew_packages = []
-
-# puts "- Calling API #{url}"
-# uri = URI(url)
-# response = Net::HTTP.get(uri)
-#
-# puts "- Parsing response"
-# packages = JSON.parse(response)
 
 def query_homebrew
   url = 'https://formulae.brew.sh/api/formula.json'
