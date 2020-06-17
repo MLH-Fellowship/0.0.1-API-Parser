@@ -19,8 +19,6 @@ while response_size > 1  do
   last_index = packages.size - 1
 end
 
-# puts packages
-# abort
 packages.each do |package|
   parsed_outdated_package = {}
   parsed_outdated_package["packagename"] = package[0]
