@@ -4,7 +4,7 @@ require_relative 'helpers/api_parser'
 directory = 'data/repology'
 outdated_repology_packages = []
 
-api_parser = RepologyApiParser.new
+api_parser = ApiParser.new
 packages = api_parser.parse_repology_api('')
 
 last_index = packages.size - 1

@@ -5,7 +5,7 @@ url = 'https://formulae.brew.sh/api/formula.json'
 directory = "data/homebrew"
 parsed_homebrew_packages = []
 
-api_parser = RepologyApiParser.new
+api_parser = ApiParser.new
 packages = api_parser.call_api(url)
 
 packages.each do |package|

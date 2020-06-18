@@ -1,7 +1,10 @@
 require 'net/http'
 require 'json'
 
-class RepologyApiParser
+class ApiParser
+  def initialize
+
+  end
 
   def call_api(url)
     puts "- Calling API #{url}"
