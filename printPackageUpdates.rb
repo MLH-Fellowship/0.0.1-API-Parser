@@ -1,6 +1,6 @@
-require_relative 'getHomeBrewJson'
-require_relative 'getRepologyJson'
-require_relative 'compareHomeBrewAndRepology'
+#require_relative 'getHomeBrewJson'
+#require_relative 'getRepologyJson'
+#require_relative 'compareHomeBrewAndRepology'
 
 
 # An hash- each key is the name of a package
