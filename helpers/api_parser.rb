@@ -17,6 +17,12 @@ class ApiParser
     self.call_api(url)
   end
 
+  def query_homebrew
+    url = 'https://formulae.brew.sh/api/formula.json'
+
+    self.call_api(url)
+  end
+
   def filter_homebrew(json)
     result = {}
 
