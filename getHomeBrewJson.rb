@@ -1,8 +1,9 @@
 require_relative 'helpers/parsed_file'
 require_relative 'helpers/api_parser'
 
-# directory = "data/homebrew"
-#parsed_homebrew_packages = []
+url = 'https://formulae.brew.sh/api/formula.json'
+directory = "data/homebrew"
+parsed_homebrew_packages = []
 
 api_parser = ApiParser.new
 packages = api_parser.call_api(url)
