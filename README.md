@@ -19,23 +19,23 @@ This project will automatically check which packages have had newer versions rel
 
 - This project can be run automatically at set intervals via GitHub Actions.
 - Executing `ruby printPackageUpdates.rb` from the command line will query
-both the Repology and Homebrew APIs.  Homebrew's current version of each
-package will be compared to the latest version of the package, per Repology's response.
+  both the Repology and Homebrew APIs. Homebrew's current version of each
+  package will be compared to the latest version of the package, per Repology's response.
 - Each outdated package will be displayed to the console like so:
+
 ```
 Package: kite
-brew => latest
+current => latest
 1.0.4 => 2.20200512.1
 
 Package: knock
-brew => latest
+current => latest
 0.7 => 0.8
 
 Package: l-smash
-brew => latest
+current => latest
 2.9.1 => 2.14.5
 ```
-- Finally, execute `bumpFormulae.rb`. This file reads the lastest file from `data/outdated_pckgs_to_update` and then verifies each projet newwest version with livecheck command and then goes ahead to open a PR to homebrew core with the command `brew bump-formula-pr`
 
 ## Contributing
 

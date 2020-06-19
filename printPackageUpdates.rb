@@ -21,7 +21,7 @@ def display_version_data(data)
   data.each do |pckg_name, versions|
     puts ""
     puts "Package: #{pckg_name}"
-    puts "brew => latest"
+    puts "current => latest"
     puts "#{versions['brew_version']} => #{versions['latest_version']}"
   end
 end
