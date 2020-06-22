@@ -10,8 +10,6 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7'
-      - run: ruby getHomeBrewJson.rb
-      - run: ruby getRepologyJson.rb
-      - run: ruby compareHomeBrewAndRepology.rb
+      - run: ruby printPackageUpdates.rb
 
       # Setup PRs to be made against HomeBrew
