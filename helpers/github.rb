@@ -2,6 +2,7 @@
 
 require "tempfile"
 require "uri"
+require_relative 'formatter'
 
 module GitHub
   module_function

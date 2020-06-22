@@ -1,10 +1,12 @@
-# require_relative 'helpers/parsed_file'
-# require_relative 'helpers/brew_commands.rb'
+require_relative 'helpers/parsed_file'
+require_relative 'helpers/brew_commands.rb'
+require_relative "helpers/github"
+include GitHub
 
-# brew_commands = BrewCommands.new
+brew_commands = BrewCommands.new
 
-# parsed_file = ParsedFile.new
-# outdated_pckgs_to_update = parsed_file.get_latest_file("data/outdated_pckgs_to_update")
+parsed_file = ParsedFile.new
+outdated_pckgs_to_update = parsed_file.get_latest_file("data/outdated_pckgs_to_update")
 
 # File.foreach(outdated_pckgs_to_update) do |line|
 #   line_hash = eval(line)
@@ -29,6 +31,9 @@
 #   end
 # end
 
-require_relative "helpers/github"
+File.foreach(outdated_pckgs_to_update) do |line|
+  line_hash = eval(line)
+  puts "#{line_hash['name']} formula"
 
-# 
+  #pull_requests = check_for_duplicate_pull_requests()
+end
