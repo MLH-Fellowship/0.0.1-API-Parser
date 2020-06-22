@@ -2,7 +2,10 @@
 
 require "tempfile"
 require "uri"
+<<<<<<< HEAD
 require_relative 'formatter'
+=======
+>>>>>>> a698acfd2519a7ca2c6693636342317d60315907
 
 module GitHub
   module_function
