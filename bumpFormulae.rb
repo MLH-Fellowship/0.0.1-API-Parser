@@ -33,7 +33,15 @@ outdated_pckgs_to_update = parsed_file.get_latest_file("data/outdated_pckgs_to_u
 
 File.foreach(outdated_pckgs_to_update) do |line|
   line_hash = eval(line)
-  puts "#{line_hash['name']} formula"
+  puts "\n bumping package: #{line_hash['name']} formula"
 
   #pull_requests = check_for_duplicate_pull_requests()
+  begin
+    bump_pr_response, bump_pr_status = brew_commands.bump_formula_pr(line_hash['name'], line_hash['download_url'], line_hash['checksum'])
+    puts "#{bump_pr_response}"
+    #abort
+  rescue
+    puts "- An error occured whilst bumping package #{line_hash['name']} \n"
+    return
+  end
 end
