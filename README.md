@@ -19,22 +19,26 @@ This project will automatically check which packages have had newer versions rel
 
 - This project can be run automatically at set intervals via GitHub Actions.
 - Executing `ruby printPackageUpdates.rb` from the command line will query
-  both the Repology and Homebrew APIs. Homebrew's current version of each
+  both the Repology and Homebrew APIs, as well as Homebrew's Livecheck. Homebrew's current version of each
   package will be compared to the latest version of the package, per Repology's response.
 - Each outdated package will be displayed to the console like so:
+- Note that some packages will not be included in the Livecheck response.  Those will have a 'Livecheck latest:' value of 'Not found'.
 
 ```
-Package: kite
-current => latest
-1.0.4 => 2.20200512.1
+Package: lci
+Brew current: 0.6
+Repology latest: 0.11.2
+Livecheck latest: 0.6
 
-Package: knock
-current => latest
-0.7 => 0.8
+Package: ldc
+Brew current: 1.20.1
+Repology latest: 1.22.0
+Livecheck latest: 1.22.0
 
-Package: l-smash
-current => latest
-2.9.1 => 2.14.5
+Package: lean
+Brew current: 3.4.2
+Repology latest: 3.16.2
+Livecheck latest: 3.4.2
 ```
 
 ## Contributing
