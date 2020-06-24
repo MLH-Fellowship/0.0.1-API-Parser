@@ -24,10 +24,4 @@ class HomebrewFormula
       return nil
     end
   end
-
-  def format_data(outdated_repology_formulas, brew_formulas)
-
-
-  end
-
 end
