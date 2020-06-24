@@ -1,6 +1,9 @@
 require 'net/http'
 require 'json'
 
+require_relative 'brew_commands'
+require_relative 'homebrew_formula'
+
 class ApiParser
   def call_api(url)
     puts "- Calling API #{url}"
@@ -11,33 +14,106 @@ class ApiParser
     JSON.parse(response)
   end
 
-  def parse_repology_api(last_package='')
-    url = 'https://repology.org/api/v1/projects/' + last_package + '?inrepo=homebrew&outdated=1'
+  def query_repology_api(last_package_in_response = '')
+    url = 'https://repology.org/api/v1/projects/' + last_package_in_response + '?inrepo=homebrew&outdated=1'
 
     self.call_api(url)
+  end
+
+  def parse_repology_api()
+    puts "\n-------- Query outdated packages from Repology --------"	  
+    page_no = 1
+    puts "\n- Paginating repology api page: #{page_no}"	  
+
+    outdated_packages = self.query_repology_api('')
+    last_pacakge_index = outdated_packages.size - 1	
+    response_size = outdated_packages.size	
+
+    while response_size > 1  do	
+      page_no += 1
+      puts "\n- Paginating repology api page: #{page_no}"	 
+
+      last_package_in_response = outdated_packages.keys[last_pacakge_index]	  
+      response = self.query_repology_api("#{last_package_in_response}/")	  
+      
+      response_size = response.size	  
+      outdated_packages.merge!(response)	  
+      last_pacakge_index = outdated_packages.size - 1	
+    end
+
+    puts "\n- #{outdated_packages.size} outdated pacakges identified by repology"	 
+    outdated_packages
   end
 
   def query_homebrew
-    url = 'https://formulae.brew.sh/api/formula.json'
-
-    self.call_api(url)
+    puts "\n-------- Get Homebrew Formulas --------"	  
+    self.call_api('https://formulae.brew.sh/api/formula.json')
   end
 
-  def filter_homebrew(json)
-    result = {}
+  def parse_homebrew_formulas()
+    formulas = self.query_homebrew()
+    parsed_homebrew_formulas = {}
 
-    json.each do |pckg, data|
-      homebrew_data = data.select { |repo| repo['repo'] == 'homebrew' }[0]
-      latest_v = nil
-
-      data.each do |datum|
-        latest_v = datum['version'] if datum['status'] == 'newest'
-      end
-
-      homebrew_data['latest_v'] = latest_v if latest_v
-      result[pckg] = homebrew_data if !homebrew_data.empty?
+    formulas.each do |formula|	
+      parsed_homebrew_formulas[formula['name']] = {
+        "fullname" => formula["full_name"],
+        "oldname" => formula["oldname"],
+        "version" => formula["versions"]['stable'],
+        "download_url" => formula["urls"]['stable']['url'],
+      }
     end
 
-    result
+    parsed_homebrew_formulas
   end
+
+  def validate_packages(outdated_repology_packages, brew_formulas)
+    puts "\n-------- Verify Outdated Repology packages as Homebrew Formulas --------"	  
+    packages = {}
+
+    outdated_repology_packages.each do |package_name, repo_using_package|
+      # Identify homebrew repo
+      repology_homebrew_repo = repo_using_package.select { |repo| repo['repo'] == 'homebrew' }[0]
+      next if repology_homebrew_repo.empty?
+
+      latest_version = nil
+
+      # Identify latest version amongst repos
+      repo_using_package.each do |repo|
+        latest_version = repo['version'] if repo['status'] == 'newest'
+      end
+
+      # Format package
+      repology_homebrew_repo['latest_version'] = latest_version if latest_version
+      # homebrew_data['srcname']
+      homebrew_package_details = brew_formulas[repology_homebrew_repo['srcname']]
+    
+      packages[repology_homebrew_repo['srcname']] = format_package(homebrew_package_details, repology_homebrew_repo)        
+    end
+
+    packages 
+  end
+
+
+  def format_package(homebrew_details, repology_details)
+    puts "- Formating package: #{repology_details['srcname']}"
+
+    brew_commands = BrewCommands.new
+    livecheck_response = brew_commands.livecheck_check_formula(repology_details['srcname'])
+   
+    homebrew_formula = HomebrewFormula.new
+    new_download_url = homebrew_formula.generate_new_download_url(homebrew_details['download_url'], homebrew_details['version'], repology_details['latest_version'])
+
+    formatted_package = {
+      'fullname'=> homebrew_details['fullname'],
+      'repology_version' => repology_details['version'],
+      'homebrew_version' => homebrew_details['version'],
+      'livecheck_latest_version' => livecheck_response['livecheck_latest_version'],
+      'current_download_url' => homebrew_details['download_url'],
+      'latest_download_url' => new_download_url,
+      'repology_latest_version' => repology_details['latest_version'],
+    } 
+
+    formatted_package
+  end
+
 end
