@@ -97,12 +97,13 @@ class ApiParser
   def format_package(homebrew_details, repology_details)
     puts "- Formating package: #{repology_details['srcname']}"
 
-    brew_commands = BrewCommands.new
-    livecheck_response = brew_commands.livecheck_check_formula(repology_details['srcname'])
-   
     homebrew_formula = HomebrewFormula.new
     new_download_url = homebrew_formula.generate_new_download_url(homebrew_details['download_url'], homebrew_details['version'], repology_details['latest_version'])
 
+    brew_commands = BrewCommands.new
+    livecheck_response = brew_commands.livecheck_check_formula(repology_details['srcname'])
+    has_open_pr = brew_commands.check_for_open_pr(repology_details['srcname'], new_download_url)
+   
     formatted_package = {
       'fullname'=> homebrew_details['fullname'],
       'repology_version' => repology_details['version'],
@@ -111,6 +112,7 @@ class ApiParser
       'current_download_url' => homebrew_details['download_url'],
       'latest_download_url' => new_download_url,
       'repology_latest_version' => repology_details['latest_version'],
+      'has_open_pr' => has_open_pr
     } 
 
     formatted_package

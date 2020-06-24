@@ -1,8 +1,4 @@
 require_relative 'helpers/api_parser'
-require_relative 'helpers/brew_commands'
-require_relative 'helpers/homebrew_formula'
-
-
 
 def display_version_data(data)
   data.each do |pckg_name, versions|
@@ -13,7 +9,6 @@ def display_version_data(data)
     puts "Livecheck latest: #{versions['livecheck_latest']}"
   end
 end
-
 
 # A hash- each key is the name of a package
 # each value is data related to package; of interest: 'latest_v'.
