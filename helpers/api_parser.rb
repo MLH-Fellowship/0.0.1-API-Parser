@@ -21,32 +21,32 @@ class ApiParser
   end
 
   def parse_repology_api()
-    puts "\n-------- Query outdated packages from Repology --------"	  
+    puts "\n-------- Query outdated packages from Repology --------"
     page_no = 1
-    puts "\n- Paginating repology api page: #{page_no}"	  
+    puts "\n- Paginating repology api page: #{page_no}"
 
     outdated_packages = self.query_repology_api('')
-    last_pacakge_index = outdated_packages.size - 1	
-    response_size = outdated_packages.size	
+    last_pacakge_index = outdated_packages.size - 1
+    response_size = outdated_packages.size
 
-    while response_size > 1  do	
+    while response_size > 1  do
       page_no += 1
-      puts "\n- Paginating repology api page: #{page_no}"	 
+      puts "\n- Paginating repology api page: #{page_no}"
 
-      last_package_in_response = outdated_packages.keys[last_pacakge_index]	  
-      response = self.query_repology_api("#{last_package_in_response}/")	  
-      
-      response_size = response.size	  
-      outdated_packages.merge!(response)	  
-      last_pacakge_index = outdated_packages.size - 1	
+      last_package_in_response = outdated_packages.keys[last_pacakge_index]
+      response = self.query_repology_api("#{last_package_in_response}/")
+
+      response_size = response.size
+      outdated_packages.merge!(response)
+      last_pacakge_index = outdated_packages.size - 1
     end
 
-    puts "\n- #{outdated_packages.size} outdated pacakges identified by repology"	 
+    puts "\n- #{outdated_packages.size} outdated pacakges identified by repology"
     outdated_packages
   end
 
   def query_homebrew
-    puts "\n-------- Get Homebrew Formulas --------"	  
+    puts "\n-------- Get Homebrew Formulas --------"
     self.call_api('https://formulae.brew.sh/api/formula.json')
   end
 
@@ -54,7 +54,7 @@ class ApiParser
     formulas = self.query_homebrew()
     parsed_homebrew_formulas = {}
 
-    formulas.each do |formula|	
+    formulas.each do |formula|
       parsed_homebrew_formulas[formula['name']] = {
         "fullname" => formula["full_name"],
         "oldname" => formula["oldname"],
@@ -67,7 +67,7 @@ class ApiParser
   end
 
   def validate_packages(outdated_repology_packages, brew_formulas)
-    puts "\n-------- Verify Outdated Repology packages as Homebrew Formulas --------"	  
+    puts "\n-------- Verify Outdated Repology packages as Homebrew Formulas --------"
     packages = {}
 
     outdated_repology_packages.each do |package_name, repo_using_package|
@@ -82,20 +82,19 @@ class ApiParser
         latest_version = repo['version'] if repo['status'] == 'newest'
       end
 
-      # Format package
       repology_homebrew_repo['latest_version'] = latest_version if latest_version
-      # homebrew_data['srcname']
       homebrew_package_details = brew_formulas[repology_homebrew_repo['srcname']]
-    
-      packages[repology_homebrew_repo['srcname']] = format_package(homebrew_package_details, repology_homebrew_repo)        
+      
+      # Format package
+      packages[repology_homebrew_repo['srcname']] = format_package(homebrew_package_details, repology_homebrew_repo)
     end
 
-    packages 
+    packages
   end
 
 
   def format_package(homebrew_details, repology_details)
-    puts "- Formating package: #{repology_details['srcname']}"
+    puts "- Formatting package: #{repology_details['srcname']}"
 
     homebrew_formula = HomebrewFormula.new
     new_download_url = homebrew_formula.generate_new_download_url(homebrew_details['download_url'], homebrew_details['version'], repology_details['latest_version'])
@@ -106,7 +105,7 @@ class ApiParser
    
     formatted_package = {
       'fullname'=> homebrew_details['fullname'],
-      'repology_version' => repology_details['version'],
+      'repology_version' => repology_details['latest_version'],
       'homebrew_version' => homebrew_details['version'],
       'livecheck_latest_version' => livecheck_response['livecheck_latest_version'],
       'current_download_url' => homebrew_details['download_url'],
@@ -116,6 +115,19 @@ class ApiParser
     } 
 
     formatted_package
+  end
+
+  def display_version_data(outdated_packages)
+    puts "==============Formatted outdated packages============\n"
+
+    outdated_packages.each do |package_name, package_details|
+      puts ""
+      puts "Package: #{package_name}"
+      puts "Brew current: #{package_details['homebrew_version']}"
+      puts "Repology latest: #{package_details['repology_version']}"
+      puts "Livecheck latest: #{package_details['livecheck_latest_version']}"
+      puts "Has Open PR?: #{package_details['has_open_pr']}"
+    end
   end
 
 end
