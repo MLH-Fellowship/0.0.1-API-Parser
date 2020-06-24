@@ -82,11 +82,10 @@ class ApiParser
         latest_version = repo['version'] if repo['status'] == 'newest'
       end
 
-      # Format package
       repology_homebrew_repo['latest_version'] = latest_version if latest_version
-      # homebrew_data['srcname']
       homebrew_package_details = brew_formulas[repology_homebrew_repo['srcname']]
-
+      
+      # Format package
       packages[repology_homebrew_repo['srcname']] = format_package(homebrew_package_details, repology_homebrew_repo)
     end
 
@@ -97,23 +96,38 @@ class ApiParser
   def format_package(homebrew_details, repology_details)
     puts "- Formatting package: #{repology_details['srcname']}"
 
-    brew_commands = BrewCommands.new
-    livecheck_response = brew_commands.livecheck_check_formula(repology_details['srcname'])
-
     homebrew_formula = HomebrewFormula.new
     new_download_url = homebrew_formula.generate_new_download_url(homebrew_details['download_url'], homebrew_details['version'], repology_details['latest_version'])
 
+    brew_commands = BrewCommands.new
+    livecheck_response = brew_commands.livecheck_check_formula(repology_details['srcname'])
+    has_open_pr = brew_commands.check_for_open_pr(repology_details['srcname'], new_download_url)
+   
     formatted_package = {
       'fullname'=> homebrew_details['fullname'],
-      'repology_version' => repology_details['version'],
+      'repology_version' => repology_details['latest_version'],
       'homebrew_version' => homebrew_details['version'],
       'livecheck_latest_version' => livecheck_response['livecheck_latest_version'],
       'current_download_url' => homebrew_details['download_url'],
       'latest_download_url' => new_download_url,
       'repology_latest_version' => repology_details['latest_version'],
-    }
+      'has_open_pr' => has_open_pr
+    } 
 
     formatted_package
+  end
+
+  def display_version_data(outdated_packages)
+    puts "==============Formatted outdated packages============\n"
+
+    outdated_packages.each do |package_name, package_details|
+      puts ""
+      puts "Package: #{package_name}"
+      puts "Brew current: #{package_details['homebrew_version']}"
+      puts "Repology latest: #{package_details['repology_version']}"
+      puts "Livecheck latest: #{package_details['livecheck_latest_version']}"
+      puts "Has Open PR?: #{package_details['has_open_pr']}"
+    end
   end
 
 end

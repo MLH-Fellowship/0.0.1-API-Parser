@@ -15,7 +15,16 @@ class BrewCommands
     self.parse_livecheck_response(response)
   end
 
-  def bump_formula_pr(formula_name, url, checksum)
+  def parse_livecheck_response(livecheck_output)
+    livecheck_output = livecheck_output.first.gsub(' ', '').split(/:|==>|\n/)
+
+    # eg: ["burp", "2.2.18", "2.2.18"]
+    package_name, brew_version, latest_version = livecheck_output
+  
+    {'name' => package_name, 'current_brew_version' => brew_version, 'livecheck_latest_version' => latest_version}
+  end
+
+  def bump_formula_pr(formula_name, url)
     command_args = [
       "brew",
       "bump-formula-pr",
@@ -24,22 +33,23 @@ class BrewCommands
       formula_name,
       "--url=#{url}",
     ]
-    Open3.capture2e(*command_args)
+
+    response = Open3.capture2e(*command_args)
+    self.parse_formula_bump_response(response)
   end
 
-  def check_for_open_pr(formula_name)
+  def parse_formula_bump_response(formula_bump_response)
+    response, status  = formula_bump_response
+    response    
+  end
+
+  def check_for_open_pr(formula_name, download_url)
     puts "- Checking for open PRs for formula : #{formula_name}"
 
-  end
+    response =  bump_formula_pr(formula_name, download_url)
 
-  def parse_livecheck_response(pckg_data)
-    parsed_data = {}
-  
-    pckg_data = pckg_data.first.gsub(' ', '').split(/:|==>|\n/)
-    # eg: ["burp", "2.2.18", "2.2.18"]
-    pckg_name, brew_version, latest_version = pckg_data
-  
-    {'name' => pckg_name, 'current_brew_version' => brew_version, 'livecheck_latest_version' => latest_version}
-  end
+    return true if !response.include? 'Error: These open pull requests may be duplicates'
+    false
+  end  
 
 end
