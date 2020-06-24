@@ -4,11 +4,15 @@ require 'open-uri'
 class HomebrewFormula
 
   def generate_new_download_url(outdated_url, old_version, latest_version)
-    return nil if outdated_url == nil
-      puts "\n- Generating download url"
-      outdated_url.gsub(old_version, latest_version)
+      if [outdated_url, old_version, latest_version].include? nil
+        puts "\n- Could not generate download url"
+        nil
+      else
+        puts "\n- Generating download url"
+        outdated_url.gsub(old_version, latest_version)
+      end
   end
-  
+
   def generate_checksum(new_url)
     begin
       puts "- Generating checksum for url: #{new_url}"
