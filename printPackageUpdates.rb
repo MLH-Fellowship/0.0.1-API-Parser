@@ -26,4 +26,7 @@ brew_formulas = api_parser.parse_homebrew_formulas()
 
 formatted_outdated_packages = api_parser.validate_packages(outdated_repology_packages, brew_formulas)
 
-puts formatted_outdated_packages
+puts "==============Formatted outdated packages============\n"
+puts "#{formatted_outdated_packages}\n\n"
+
+display_version_data(formatted_outdated_packages)
