@@ -5,12 +5,12 @@ require_relative 'helpers/homebrew_formula'
 
 
 def display_version_data(data)
-  data.each do |pckg_name, versions|
+  data.each do |pckg_name, pckg_data|
     puts ""
     puts "Package: #{pckg_name}"
-    puts "Brew current: #{versions['brew_version']}"
-    puts "Repology latest: #{versions['repology_latest']}"
-    puts "Livecheck latest: #{versions['livecheck_latest']}"
+    puts "Brew current: #{pckg_data['homebrew_version']}"
+    puts "Repology latest: #{pckg_data['repology_version']}"
+    puts "Livecheck latest: #{pckg_data['livecheck_latest_version']}"
   end
 end
 
