@@ -21,24 +21,28 @@ This project will automatically check which packages have had newer versions rel
 - Executing `ruby printPackageUpdates.rb` from the command line will query
   both the Repology and Homebrew APIs, as well as Homebrew's Livecheck. Homebrew's current version of each
   package will be compared to the latest version of the package, per Repology's response.
+- Homebrew's livecheck is also queried for each package, and that data is parsed, if available.
 - Each outdated package will be displayed to the console like so:
 - Note that some packages will not be included in the Livecheck response.  Those will have a 'Livecheck latest:' value of 'Not found'.
 
 ```
-Package: lci
-Brew current: 0.6
-Repology latest: 0.11.2
-Livecheck latest: 0.6
+Package: openclonk
+Brew current: 7.0
+Repology latest: 8.1
+Livecheck latest: 8.1
+Has Open PR?: true
 
-Package: ldc
-Brew current: 1.20.1
-Repology latest: 1.22.0
-Livecheck latest: 1.22.0
+Package: openjdk
+Brew current: 13.0.2+8
+Repology latest: 15.0.0.0~14
+Livecheck latest: Not found.
+Has Open PR?: false
 
-Package: lean
-Brew current: 3.4.2
-Repology latest: 3.16.2
-Livecheck latest: 3.4.2
+Package: opentsdb
+Brew current: 2.3.1
+Repology latest: 2.4.0
+Livecheck latest: 2.4.0
+Has Open PR?: true
 ```
 
 ## Contributing
