@@ -10,7 +10,7 @@ def display_version_data(data)
     puts "Package: #{pckg_name}"
     puts "Brew current: #{pckg_data['homebrew_version']}"
     puts "Repology latest: #{pckg_data['repology_version']}"
-    puts "Livecheck latest: #{pckg_data['livecheck_latest_version']}"
+    puts "Livecheck latest: #{pckg_data['livecheck_latest_version'] || "Not found."}"
   end
 end
 
